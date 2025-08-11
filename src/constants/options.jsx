@@ -32,7 +32,7 @@ export const SelectTravelesList = [
 export const SelectBudgetOptions = [
     {
         id: 1,
-        title: 'Budget',
+        title: 'Compact',
         description: 'Stay conscious of costs.',
         icon: '💵',
     },
@@ -52,26 +52,45 @@ export const SelectBudgetOptions = [
 
 // AI_PROMPT.js or constants/options.js
 export const AI_PROMPT = `
-Generate Travel Plan for Location: {location}, for {totalDays} Days for {traveller} with a {budget} budget.
-Give me a list of hotel options with the following properties:
+You are a travel planning assistant.
 
-- hotelName
-- hotel address
-- price
-- hotel image url
-- geo coordinates
-- rating
-- description
+Generate a travel plan in valid JSON format for:
+- Location: {location}
+- Duration: {totalDays} days
+- Traveller type: {traveller}
+- Budget: {budget}
 
-Also suggest a day-wise itinerary including:
+Your response must include two main sections:
 
-- placeName
-- placeDetails
-- place image url
-- geo coordinates
-- ticket pricing
-- time required at each location
-- best time to visit
+1. "hotels": an array of **3 to 5** hotel objects. Each hotel must include:
+  - "hotelName"
+  - "address"
+  - "price" (price range $ or ₹ per night)
+  - "imageUrl"
+  - "coordinates" (latitude, longitude)
+  - "rating" (eg., 4.5 stars)
+  - "description"
 
-Respond ONLY in valid JSON format.
-`;
+2. "itinerary": an array of day-wise plans. Each object must have:
+  - "day": "Day 1", "Day 2", etc.
+  - "places": [
+      {
+        "time": 10:00 AM - 12:00 PM,
+        "placeName": "...",
+        "placeDetails": "...",
+        "imageUrl": "...",
+        "coordinates": { "latitude": ..., "longitude": ... },
+        "ticketPrice": "...",
+        "timeRequired": "...",
+        "bestTimeToVisit": "..."
+      },
+      ...
+    ]
+
+
+📌 Respond ONLY with a **valid JSON object**.
+📌 Use **double quotes** around all keys and string values.
+📌 Do not include any explanation, markdown, or extra text.
+`.trim();
+
+

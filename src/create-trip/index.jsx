@@ -22,6 +22,7 @@ import {
 import { useGoogleLogin } from '@react-oauth/google';
 import { doc, setDoc } from 'firebase/firestore';
 import {db} from '@/service/firebaseConfig'
+import { useNavigate } from 'react-router-dom';
 
 export const CreateTrip = () => {
   const [place, setPlace] = useState();
@@ -33,6 +34,7 @@ export const CreateTrip = () => {
   });
   const [loading, setLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
+  const navigate = useNavigate();
   const handleInputChange = (name, value) => {
     setFormData((prev) => ({
       ...prev,
@@ -56,13 +58,15 @@ export const CreateTrip = () => {
     const user = JSON.parse(localStorage.getItem('user'));
     const docId = Date.now().toString();
 
-    await setDoc(doc(db, "AITrips", "docId"), {
+    await setDoc(doc(db, "AITrips", docId), {
       userSelection: formData,
       tripData: tripData,
       userEmail: user?.email,
       id: docId
     });
+    console.log(docId);
     setLoading(false);
+    navigate(`/view-trip/`+docId);
   };
 
  const OnGenerateTrip = async () => {

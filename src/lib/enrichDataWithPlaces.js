@@ -6,7 +6,7 @@ const UNSPLASH_ACCESS_KEY = import.meta.env.VITE_UNSPLASH_API_KEY;
 // Helper to get Google Place data
 async function getPlaceDetails(query) {
   const encodedQuery = encodeURIComponent(query);
-  const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodedQuery}&key=${GOOGLE_PLACES_API_KEY}`;
+  const url = `http://localhost:5000/api/place-details?query=${encodedQuery}`;
 
   const res = await fetch(url);
   const data = await res.json();
@@ -48,14 +48,18 @@ async function enrichPlace(entry, queryKey = "name") {
 }
 
 export async function enrichTravelData(data) {
+  const hotels = Array.isArray(data.hotels) ? data.hotels : [];
+  const itinerary = Array.isArray(data.itinerary) ? data.itinerary : [];
+
   const enrichedHotels = await Promise.all(
-    (data.hotels || []).map((hotel) => enrichPlace(hotel, "HotelName"))
+    hotels.map((hotel) => enrichPlace(hotel, "HotelName"))
   );
 
   const enrichedItinerary = await Promise.all(
-    (data.itinerary || []).map(async (day) => {
+    itinerary.map(async (day) => {
+      const places = Array.isArray(day.places) ? day.places : [];
       const enrichedPlaces = await Promise.all(
-        (day.places || []).map((place) => enrichPlace(place, "placeName"))
+        places.map((place) => enrichPlace(place, "placeName"))
       );
       return { ...day, places: enrichedPlaces };
     })
@@ -63,3 +67,4 @@ export async function enrichTravelData(data) {
 
   return { ...data, hotels: enrichedHotels, itinerary: enrichedItinerary };
 }
+
