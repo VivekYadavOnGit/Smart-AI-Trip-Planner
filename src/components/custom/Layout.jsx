@@ -10,7 +10,7 @@ export default function Layout() {
       <div className="pt-[70px]"> {/* space to offset fixed header */}
         <Outlet />
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

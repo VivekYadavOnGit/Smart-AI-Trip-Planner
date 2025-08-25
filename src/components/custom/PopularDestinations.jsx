@@ -98,7 +98,7 @@ const PopularDestinations = () => {
                 
                 <div className="flex flex-wrap gap-2">
                   {destination.tags.map((tag, tagIndex) => (
-                    <Badge key={tagIndex} variant="secondary" className="text-xs">
+                    <Badge key={tagIndex} variant="secondary" className="text-xs bg-[#00334d] hover:bg-[#336985] text-white">
                       {tag}
                     </Badge>
                   ))}

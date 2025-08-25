@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../service/firebaseConfig';
 import { UserTripCardItems } from './components/UserTripCardItems';
+import Footer from '@/components/custom/Footer';
 
 const MyTrips = () => {
   const navigate = useNavigate();
@@ -44,6 +45,7 @@ const MyTrips = () => {
   };
 
   return (
+  <>
     <div className="sm:px-10 md:px-32 lg:px-56 xl:px-62 px-5 mt-10">
       <h2 className="text-3xl font-bold mb-4">My Trips</h2>
 
@@ -64,6 +66,9 @@ const MyTrips = () => {
         )}
       </div>
     </div>
+    <Footer />
+        
+        </>
   );
 };
 

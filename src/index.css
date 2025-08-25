@@ -44,6 +44,63 @@
 }
 
 :root {
+  --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    /* Travel-themed primary colors */
+    --primary: 16 100% 66%; /* Vibrant coral/orange for CTAs */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 200 100% 20%; /* Deep ocean blue */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 25 95% 53%; /* Warm sunset orange */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 16 100% 66%;
+
+    /* Travel-specific design tokens */
+    --hero-gradient: linear-gradient(135deg, hsl(200 100% 30%), hsl(16 100% 66%));
+    --sunset-gradient: linear-gradient(90deg, hsl(25 95% 53%), hsl(16 100% 66%));
+    --ocean-gradient: linear-gradient(180deg, hsl(200 100% 40%), hsl(200 100% 20%));
+    
+    /* Shadows with travel theme */
+    --shadow-soft: 0 4px 20px hsla(200 100% 30% / 0.15);
+    --shadow-glow: 0 0 30px hsla(16 100% 66% / 0.3);
+    --shadow-deep: 0 10px 40px hsla(222.2 84% 4.9% / 0.1);
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+    
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

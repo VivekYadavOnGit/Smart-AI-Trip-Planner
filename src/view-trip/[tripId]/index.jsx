@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { InfoSection } from './components/InfoSection';
 import { Hotels } from './components/Hotels';
 import { PlaceToVisit } from './components/PlaceToVisit';
+import Footer from '@/components/custom/Footer';
 
 export const ViewTrip = () => {
 
@@ -31,23 +32,21 @@ export const ViewTrip = () => {
 
 
 
-    return (
+    return (<>
         <div className='p-10 md:px-20 lg:px-44 xl:px-56 mt-10'>
             {/* Information Section */}
-
             <InfoSection trip={tripData} />
 
             {/* Hotel Recommended  */}
-
             <Hotels trip={tripData} />
 
             {/* Daily Plan */}
-
             <PlaceToVisit trip={tripData} />
-
-            {/* Footer Section */}
-
-
         </div>
+
+         {/* Footer Section */}
+        <Footer />
+        
+        </>
     )
 }

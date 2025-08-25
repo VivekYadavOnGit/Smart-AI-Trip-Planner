@@ -75,7 +75,8 @@ function Header() {
     <header className="flex items-center justify-between p-3 px-6 shadow-xs absolute top-0 left-0 right-0 z-50">
       {/* Logo */}
       <div className="flex items-center gap-3">
-        <img src="/logo.svg" alt="SmartAI Trip Logo" className="h-10" />
+        <a href="/">
+        <img src="/logo.svg" alt="SmartAI Trip Logo" className="h-10" /></a>
       </div>
 
       {/* Right Section */}
