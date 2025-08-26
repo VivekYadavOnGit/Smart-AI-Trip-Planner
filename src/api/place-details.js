@@ -1,3 +1,4 @@
+// api/place-details.js
 import axios from "axios";
 
 export default async function handler(req, res) {
@@ -12,7 +13,9 @@ export default async function handler(req, res) {
     const GOOGLE_PLACES_API_KEY = process.env.GOOGLE_PLACES_API_KEY;
 
     const response = await axios.get(
-      `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(query)}&key=${GOOGLE_PLACES_API_KEY}`
+      `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(
+        query
+      )}&key=${GOOGLE_PLACES_API_KEY}`
     );
 
     const place = response.data.results[0];

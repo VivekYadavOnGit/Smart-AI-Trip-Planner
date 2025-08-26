@@ -6,14 +6,13 @@ export const enrichTravelData = async (tripData) => {
         const enrichedActivities = await Promise.all(
           day.activities.map(async (activity) => {
             try {
-              // Call your Vercel serverless API
               const res = await fetch(
                 `/api/place-details?query=${encodeURIComponent(activity.name)}`
               );
 
               if (!res.ok) {
                 console.error(`❌ Failed to fetch details for ${activity.name}`);
-                return activity; // return original if failed
+                return activity;
               }
 
               const placeDetails = await res.json();
@@ -27,7 +26,7 @@ export const enrichTravelData = async (tripData) => {
               };
             } catch (err) {
               console.error(`❌ Error enriching ${activity.name}:`, err.message);
-              return activity; // return original if error
+              return activity;
             }
           })
         );
@@ -39,6 +38,6 @@ export const enrichTravelData = async (tripData) => {
     return { ...tripData, itinerary: enrichedDays };
   } catch (err) {
     console.error("❌ Error enriching trip data:", err.message);
-    return tripData; // fallback to original
+    return tripData;
   }
 };
