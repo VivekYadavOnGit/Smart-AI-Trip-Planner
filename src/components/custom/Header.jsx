@@ -1,3 +1,4 @@
+//Header
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Separator } from "@/components/ui/separator";
@@ -20,7 +21,7 @@ import {
 } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { X } from 'lucide-react';
+import { X, Sparkles } from 'lucide-react';
 
 function Header() {
   const navigate = useNavigate();
@@ -74,10 +75,12 @@ function Header() {
   return (
     <header className="flex items-center justify-between p-3 px-6 shadow-xs absolute top-0 left-0 right-0 z-50">
       {/* Logo */}
-      <div className="flex items-center gap-3">
-        <a href="/">
-        <img src="/logo.svg" alt="SmartAI Trip Logo" className="h-10" /></a>
-      </div>
+      <div className="flex items-center space-x-2 cursor-pointer" onClick={() => navigate("/")}>
+                  <div className="w-8 h-8 bg-[#ff7e5f] rounded-lg flex items-center justify-center">
+                    <Sparkles className="w-5 h-5 text-white" />
+                  </div>
+                  <span className="text-2xl font-bold text-black">Planora.io</span>
+                </div>
 
       {/* Right Section */}
       <div className="flex items-center gap-4">

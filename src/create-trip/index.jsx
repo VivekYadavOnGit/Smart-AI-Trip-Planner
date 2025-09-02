@@ -23,6 +23,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { doc, setDoc } from 'firebase/firestore';
 import {db} from '@/service/firebaseConfig'
 import { useNavigate } from 'react-router-dom';
+import Header from '@/components/custom/Header';
 import Footer from '@/components/custom/Footer';
 
 export const CreateTrip = () => {
@@ -145,6 +146,7 @@ export const CreateTrip = () => {
 
   return (
     <>
+    <Header />
     <div className='sm:px-10 md:px-32 lg:px-56 xl:px-72 px-5 mt-20'>
       <h1 className='text-3xl font-bold'>Tell us your travel preferences 🗺️✈️</h1>
       <p className='mt-3 text-gray-500 text-xl'>
