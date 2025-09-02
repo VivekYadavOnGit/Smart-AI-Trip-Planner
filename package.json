@@ -4,13 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "start": "node server.js",
-    "dev": "nodemon server.js"
-  },
+  "dev": "vite",                        
+  "dev:api": "nodemon src/api/place-details.js", 
+  "build": "vite build",
+  "lint": "eslint .",
+  "preview": "vite preview"
+}
+,
   "dependencies": {
     "@google/genai": "^1.11.0",
     "@google/generative-ai": "^0.24.1",
