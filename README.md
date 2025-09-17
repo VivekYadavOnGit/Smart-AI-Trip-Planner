@@ -48,4 +48,15 @@ Our system provides:
 ## 🧱 System Design
 
 ### 📊 Architecture Diagram
+```mermaid
+flowchart TD
+    A[Create Trip Info webpage] --> B[Click Generate Trip]
+    B --> C{Authentication}
+    C -->|Not Authenticated| D[Google Auth]
+    D --> E[Save to Local]
+    E --> F[Generate Prompt]
+    C -->|Authenticated| F[Generate Prompt]
+    F --> G[Google Gemini AI Model]
+    G --> H[Trip Generated]
+```
 
