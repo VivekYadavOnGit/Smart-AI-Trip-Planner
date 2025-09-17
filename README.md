@@ -1,4 +1,4 @@
-# 🌐 Smart AI Trip Planner
+# 🌐 Planora - Smart AI Trip Planner
 
 **Smart AI Trip Planner** is an intelligent travel planning web application that leverages AI to generate personalized travel itineraries, budget suggestions, and destination highlights. It helps users discover new places, plan day-wise trips, and get travel tips — all in one place, just by chatting with the smart AI assistant.
 
@@ -45,8 +45,6 @@ Our system provides:
 
 ---
 
-## 🧱 System Design
-
 ### 📊 Architecture Diagram
 ```mermaid
 flowchart TD
@@ -60,3 +58,23 @@ flowchart TD
     G --> H[Trip Generated]
 ```
 
+---
+
+## 📈 Future Scope
+- Booking Integration:-
+      Allow users to book hotels, flights, and transport directly from the itinerary.
+- Multi-user Planning:-
+      Enable group planning with shared itineraries and collaborative edits.
+- Offline Access:-
+      Let users download itineraries as PDFs or access them offline via mobile apps.
+
+  ---
+## 📚 Conclusion
+- Planora- A SmartAI Trip Planner redefines travel planning by leveraging artificial intelligence, real-time data, and intuitive design. It not only automates itinerary creation but also adapts to user preferences, making trips more personalized, efficient, and sustainable. 
+- With seamless integration of APIs, smart recommendations, and day-to-day planning features, it transforms the complex process of organizing travel into a simple, engaging, and intelligent experience.
+  
+---
+
+## 👤 Contributor
+- Vivek Chandrika Yadav
+- vivekyadavatwork@gmail.com
