@@ -54,43 +54,49 @@ export const SelectBudgetOptions = [
 export const AI_PROMPT = `
 You are a travel planning assistant.
 
-Generate a travel plan in valid JSON format for:
+Generate a travel plan in **valid, strict JSON** format for:
 - Location: {location}
 - Duration: {totalDays} days
 - Traveller type: {traveller}
 - Budget: {budget}
 
-Your response must include two main sections:
+The JSON structure must be:
 
-1. "hotels": an array of **3 to 5** hotel objects. Each hotel must include:
-  - "hotelName"
-  - "address"
-  - "price" (price range $ or ₹ per night)
-  - "imageUrl"
-  - "coordinates" (latitude, longitude)
-  - "rating" (eg., 4.5 stars)
-  - "description"
+{
+  "hotels": [
+    {
+      "hotelName": "",
+      "address": "",
+      "price": "",
+      "imageUrl": "",
+      "coordinates": { "latitude": 0, "longitude": 0 },
+      "rating": "",
+      "description": ""
+    }
+  ],
+  "itinerary": [
+    {
+      "day": "Day 1",
+      "places": [
+        {
+          "time": "10:00 AM - 12:00 PM",
+          "placeName": "",
+          "placeDetails": "",
+          "imageUrl": "",
+          "coordinates": { "latitude": 0, "longitude": 0 },
+          "ticketPrice": "",
+          "timeRequired": "",
+          "bestTimeToVisit": ""
+        }
+      ]
+    }
+  ]
+}
 
-2. "itinerary": an array of day-wise plans. Each object must have:
-  - "day": "Day 1", "Day 2", etc.
-  - "places": [
-      {
-        "time": 10:00 AM - 12:00 PM,
-        "placeName": "...",
-        "placeDetails": "...",
-        "imageUrl": "...",
-        "coordinates": { "latitude": ..., "longitude": ... },
-        "ticketPrice": "...",
-        "timeRequired": "...",
-        "bestTimeToVisit": "..."
-      },
-      ...
-    ]
-
-
-📌 Respond ONLY with a **valid JSON object**.
-📌 Use **double quotes** around all keys and string values.
-📌 Do not include any explanation, markdown, or extra text.
+📌 VERY IMPORTANT:
+- Return **only the JSON object**, no markdown or text.
+- Use **double quotes** for all keys and string values.
+- Ensure the JSON is **syntactically valid and parseable** by JSON.parse().
+- Do NOT include comments or trailing commas.
 `.trim();
-
 

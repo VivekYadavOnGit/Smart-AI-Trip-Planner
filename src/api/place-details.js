@@ -10,7 +10,13 @@ export default async function handler(req, res) {
   if (!query) return res.status(400).json({ error: "Missing query" });
 
   try {
-    const GOOGLE_PLACES_API_KEY = process.env.GOOGLE_PLACES_API_KEY;
+    // allow either name used in dev or production
+    const GOOGLE_PLACES_API_KEY =
+      process.env.GOOGLE_PLACES_API_KEY || process.env.VITE_GOOGLE_PLACE_API_KEY;
+
+    if (!GOOGLE_PLACES_API_KEY) {
+      return res.status(500).json({ error: "Missing Google Places API key on server" });
+    }
 
     const response = await axios.get(
       `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(
@@ -18,20 +24,20 @@ export default async function handler(req, res) {
       )}&key=${GOOGLE_PLACES_API_KEY}`
     );
 
-    const place = response.data.results[0];
+    const place = response.data.results?.[0];
 
     const photoUrl = place?.photos?.[0]
       ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${GOOGLE_PLACES_API_KEY}`
       : null;
 
     return res.status(200).json({
-      address: place?.formatted_address,
-      rating: place?.rating,
-      coordinates: place?.geometry?.location,
+      address: place?.formatted_address || null,
+      rating: place?.rating || null,
+      coordinates: place?.geometry?.location || null,
       image: photoUrl,
     });
   } catch (err) {
-    console.error("Error fetching place:", err.message);
+    console.error("Error fetching place:", err?.message || err);
     res.status(500).json({ error: "Failed to fetch from Google" });
   }
 }
