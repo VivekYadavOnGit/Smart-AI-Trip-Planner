@@ -37,19 +37,38 @@ export const InfoSection = ({ trip }) => {
   };
 
   return (
-    <div>
-      <img src={photoUrl} className='h-[340px] w-full object-cover rounded-xl' alt="Location" />
-      <div className='flex justify-between items-center'>
-        <div className='flex flex-col gap-2 my-5'>
-          <h2 className='font-bold text-2xl'>{trip.userSelection?.location?.label}</h2>
-          <div className='flex gap-5'>
-            <h2 className='p-1 px-3 bg-gray-200 rounded-full text-gray-500'>📆 {trip.userSelection?.noOfDays} Day</h2>
-            <h2 className='p-1 px-3 bg-gray-200 rounded-full text-gray-500'>💰 {trip.userSelection?.budget} Budget</h2>
-            <h2 className='p-1 px-3 bg-gray-200 rounded-full text-gray-500'>#️⃣ No. of Traveller: {trip.userSelection?.traveller}</h2>
+    <div className="mb-10">
+      {/* Image Section */}
+      <div className="relative w-full h-[340px] overflow-hidden rounded-xl">
+        <img
+          src={photoUrl}
+          alt={trip?.userSelection?.location?.label || 'Location'}
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      {/* Trip Info */}
+      <div className="flex justify-between items-start mt-5">
+        <div className="flex flex-col gap-3">
+          <h2 className="text-2xl font-bold">{trip?.userSelection?.location?.label}</h2>
+          <div className="flex flex-wrap gap-3">
+            <span className="p-1 px-3 bg-gray-200 rounded-full text-gray-500">
+              📆 {trip?.userSelection?.noOfDays} Day{trip?.userSelection?.noOfDays > 1 ? 's' : ''}
+            </span>
+            <span className="p-1 px-3 bg-gray-200 rounded-full text-gray-500">
+              💰 {trip?.userSelection?.budget} Budget
+            </span>
+            <span className="p-1 px-3 bg-gray-200 rounded-full text-gray-500">
+              #️⃣ Travellers: {trip?.userSelection?.traveller}
+            </span>
           </div>
         </div>
-        <Button><Share2 /></Button>
+
+        <Button>
+          <Share2 size={20} />
+        </Button>
       </div>
     </div>
   );
+
 };
