@@ -101,22 +101,45 @@ export const CreateTrip = () => {
   try {
     const result = await chatSession.sendMessage(FINAL_PROMPT);
 
+    // Extract JSON block
     const jsonMatch = result.match(/\{[\s\S]*\}/);
     if (!jsonMatch) throw new Error("No valid JSON block found in AI response");
 
-    const parsed = JSON.parse(jsonMatch[0]);
-    const enriched = await enrichTravelData(parsed);
+    let jsonString = jsonMatch[0];
 
+    // ❌ Cleanup common JSON issues
+    jsonString = jsonString
+      .replace(/\n/g, ' ')                       // remove newlines
+      .replace(/,\s*}/g, '}')                   // remove trailing commas in objects
+      .replace(/,\s*]/g, ']')                   // remove trailing commas in arrays
+      .replace(/([{,])\s*([a-zA-Z0-9_]+)\s*:/g, '$1"$2":') // quote unquoted keys
+
+    let parsed;
+    try {
+      parsed = JSON.parse(jsonString);
+    } catch (parseError) {
+      console.error("❌ JSON Parse Error:", parseError);
+      console.error("❌ Attempted JSON:", jsonString);
+      throw new Error("Failed to parse AI response as JSON");
+    }
+
+    // Validate required fields
+    if (!parsed.days || !Array.isArray(parsed.days)) {
+      throw new Error("Invalid trip data format: 'days' array missing");
+    }
+
+    const enriched = await enrichTravelData(parsed);
     console.log("✨ Final Trip Data:", enriched);
-    await SaveAiTrip(enriched); // ✅ Await this
+    await SaveAiTrip(enriched);
     toast.success("🎉 Your travel plan is ready!");
   } catch (error) {
     console.error("❌ Error generating trip:", error);
-    toast.error("❌ Failed to generate trip");
+    toast.error(`Failed to generate trip: ${error.message}`);
   } finally {
-    setLoading(false); // ✅ Always runs
+    setLoading(false);
   }
 };
+
 
 
   const GetUserProfile = async (tokenInfo) => {
