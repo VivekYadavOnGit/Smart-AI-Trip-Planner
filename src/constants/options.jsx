@@ -51,52 +51,47 @@ export const SelectBudgetOptions = [
 ]
 
 // AI_PROMPT.js or constants/options.js
-export const AI_PROMPT = `
-You are a travel planning assistant.
+export const AI_PROMPT = `You are a JSON-only travel planning assistant.
+Rules:
+- Return ONLY valid JSON
+- No explanations or additional text
+- No markdown formatting
+- No trailing commas
+- All strings must be in double quotes
+- Arrays and objects must be properly closed
+- Maximum 3 activities per day
+- Maximum 3 hotel suggestions
 
-Generate a travel plan in **valid, strict JSON** format for:
-- Location: {location}
-- Duration: {totalDays} days
-- Traveller type: {traveller}
-- Budget: {budget}
-
-The JSON structure must be:
-
+Structure:
 {
-  "hotels": [
-    {
-      "hotelName": "",
-      "address": "",
-      "price": "",
-      "imageUrl": "",
-      "coordinates": { "latitude": 0, "longitude": 0 },
-      "rating": "",
-      "description": ""
-    }
-  ],
+  "destination": "City Name",
   "itinerary": [
     {
       "day": "Day 1",
       "places": [
         {
           "time": "10:00 AM - 12:00 PM",
-          "placeName": "",
-          "placeDetails": "",
-          "imageUrl": "",
-          "coordinates": { "latitude": 0, "longitude": 0 },
-          "ticketPrice": "",
-          "timeRequired": "",
-          "bestTimeToVisit": ""
+          "placeName": "Place Name",
+          "placeDetails": "Brief description",
+          "ticketPrice": "Price or Free",
+          "timeRequired": "2 hours",
+          "bestTimeToVisit": "Morning/Afternoon/Evening"
         }
       ]
     }
-  ]
+  ],
+  "hotels": [
+    {
+      "hotelName": "Hotel Name",
+      "address": "Full address",
+      "price": "Price range per night",
+      "description": "Brief description"
+    }
+  ],
+  "estimated_cost": "Total budget in local currency",
+  "best_time_to_visit": "Best season or months"
 }
 
-📌 VERY IMPORTANT:
-- Return **only the JSON object**, no markdown or text.
-- Use **double quotes** for all keys and string values.
-- Ensure the JSON is **syntactically valid and parseable** by JSON.parse().
-- Do NOT include comments or trailing commas.
-`.trim();
+Generate a travel plan for {location} for {totalDays} days with {traveller} and {budget} budget.`.trim();
+
 
