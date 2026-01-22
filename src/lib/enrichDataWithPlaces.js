@@ -3,35 +3,35 @@ export const enrichTravelData = async (tripData) => {
   try {
     const enrichedDays = await Promise.all(
       tripData.itinerary.map(async (day) => {
-        const enrichedActivities = await Promise.all(
-          day.activities.map(async (activity) => {
+        const enrichedPlaces = await Promise.all(
+          (day.places ?? []).map(async (place) => {
             try {
               const res = await fetch(
-                `/api/place-details?query=${encodeURIComponent(activity.name)}`
+                `/api/place-details?query=${encodeURIComponent(place.placeName)}`
               );
 
               if (!res.ok) {
-                console.error(`❌ Failed to fetch details for ${activity.name}`);
-                return activity;
+                console.error(`❌ Failed to fetch details for ${place.placeName}`);
+                return place;
               }
 
               const placeDetails = await res.json();
 
               return {
-                ...activity,
-                address: placeDetails.address,
-                rating: placeDetails.rating,
-                coordinates: placeDetails.coordinates,
-                image: placeDetails.image,
+                ...place,
+                // Fill missing fields from Places API (keep AI fields if already present)
+                placeDetails: place.placeDetails ?? placeDetails.address ?? place.placeDetails,
+                coordinates: place.coordinates ?? placeDetails.coordinates ?? place.coordinates,
+                imageUrl: place.imageUrl ?? placeDetails.image ?? place.imageUrl,
               };
             } catch (err) {
-              console.error(`❌ Error enriching ${activity.name}:`, err.message);
-              return activity;
+              console.error(`❌ Error enriching ${place.placeName}:`, err.message);
+              return place;
             }
           })
         );
 
-        return { ...day, activities: enrichedActivities };
+        return { ...day, places: enrichedPlaces };
       })
     );
 

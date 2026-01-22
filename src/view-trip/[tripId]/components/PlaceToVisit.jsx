@@ -11,7 +11,7 @@ export const PlaceToVisit = ({ trip }) => {
         {trip.tripData?.itinerary?.map((item, index) => (
           <div key={index} className=''>
             <h2 className='font-medium text-lg mt-3'>{item.day}</h2>
-            <div className='grid grid-cols-2 gap-5'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
               {item.places?.map((place, index) => (
                 <div key={index} className=''>
                   <h2 className='font-medium text-sm text-orange-600'>{place.time}</h2>

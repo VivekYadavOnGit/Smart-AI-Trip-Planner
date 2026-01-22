@@ -9,14 +9,18 @@ export const InfoSection = ({ trip }) => {
   const [photoUrl, setPhotoUrl] = useState('/placeholder.png');
 
   useEffect(() => {
-    if (trip) {
+    const label = trip?.userSelection?.location?.label;
+    if (label && label.trim().length > 0) {
       fetchPlacePhoto();
     }
   }, [trip]);
 
   const fetchPlacePhoto = async () => {
+    const label = trip?.userSelection?.location?.label;
+    if (!label || !label.trim()) return;
+
     const data = {
-      textQuery: trip?.userSelection?.location?.label
+      textQuery: label.trim()
     };
 
     try {

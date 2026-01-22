@@ -118,14 +118,42 @@ export const CreateTrip = () => {
     try {
       parsed = JSON.parse(jsonString);
     } catch (parseError) {
-      console.error("❌ JSON Parse Error:", parseError);
+      console.error("❌ JSON Parse Error (first pass):", parseError);
       console.error("❌ Attempted JSON:", jsonString);
-      throw new Error("Failed to parse AI response as JSON");
+
+      // Try a best-effort fix for truncated JSON (e.g. missing closing ] or })
+      const openCurly = (jsonString.match(/{/g) || []).length;
+      const closeCurly = (jsonString.match(/}/g) || []).length;
+      const openSquare = (jsonString.match(/\[/g) || []).length;
+      const closeSquare = (jsonString.match(/]/g) || []).length;
+
+      let fixedJson = jsonString;
+
+      // Close arrays first, then objects – this matches our schema shape
+      if (openSquare > closeSquare) {
+        fixedJson += ']'.repeat(openSquare - closeSquare);
+      }
+      if (openCurly > closeCurly) {
+        fixedJson += '}'.repeat(openCurly - closeCurly);
+      }
+
+      try {
+        parsed = JSON.parse(fixedJson);
+        console.warn("✅ JSON parsed successfully after auto-fix.");
+      } catch (secondError) {
+        console.error("❌ JSON Parse Error (after auto-fix):", secondError);
+        throw new Error("Failed to parse AI response as JSON");
+      }
     }
 
-    // Validate required fields
-    if (!parsed.days || !Array.isArray(parsed.days)) {
-      throw new Error("Invalid trip data format: 'days' array missing");
+    // Validate required fields (support older schema too)
+    if (!parsed.itinerary || !Array.isArray(parsed.itinerary)) {
+      if (parsed.days && Array.isArray(parsed.days)) {
+        parsed.itinerary = parsed.days;
+        delete parsed.days;
+      } else {
+        throw new Error("Invalid trip data format: 'itinerary' array missing");
+      }
     }
 
     const enriched = await enrichTravelData(parsed);

@@ -7,14 +7,18 @@ export const HotelCardItem = ({ hotel }) => {
   const [photoUrl, setPhotoUrl] = useState("/placeholder.png");
 
   useEffect(() => {
-    if (hotel) {
+    const name = hotel?.hotelName;
+    if (name && name.trim().length > 0) {
       fetchPlacePhoto();
     }
   }, [hotel]);
 
   const fetchPlacePhoto = async () => {
+    const name = hotel?.hotelName;
+    if (!name || !name.trim()) return;
+
     const data = {
-      textQuery: hotel?.hotelName,
+      textQuery: name.trim(),
     };
 
     try {

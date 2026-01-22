@@ -9,14 +9,18 @@ export const PlaceCardItem = ({place}) => {
 const [photoUrl, setPhotoUrl] = useState('/placeholder.png');
 
   useEffect(() => {
-    if (place) {
+    const name = place?.placeName;
+    if (name && name.trim().length > 0) {
       fetchPlacePhoto();
     }
   }, [place]);
 
   const fetchPlacePhoto = async () => {
+    const name = place?.placeName;
+    if (!name || !name.trim()) return;
+
     const data = {
-      textQuery: place.placeName
+      textQuery: name.trim()
     };
 
     try {
@@ -38,17 +42,24 @@ const [photoUrl, setPhotoUrl] = useState('/placeholder.png');
 
   return (
     <Link to={'https://www.google.com/maps/search/?api=1&query=' + place.placeName + ", " + place?.address} target='_blank' rel='noopener noreferrer'>
-    <div className='border rounded-xl p-3 mt-2 flex gap-5 hover:scale-105 transition-all hover:shadow-sm cursor-pointer'>
-        <img src={photoUrl}
-        className='w-[130px] h-[130px] rounded-xl object-cover' 
+    <div className='border rounded-xl p-3 mt-2 flex gap-4 hover:scale-105 transition-all hover:shadow-sm cursor-pointer w-full'>
+        <img
+          src={photoUrl}
+          alt={place.placeName}
+          className='w-[130px] h-[130px] rounded-xl object-cover flex-shrink-0' 
         />
 
-        <div>
-            <h2 className='font-bold text-lg'>{place.placeName}</h2>
-            <p className='text-sm text-gray-500 mt-1'>{place.placeDetails}</p>
-            <h2 className='mt-1 text-sm text-black- flex flex-cols-2 gap-1'>Best Time to Visit: <p className='text-green-500 font-bold'>{place.bestTimeToVisit}</p></h2>
-            <h2 className='mt-1 text-red-400 font-bold'>🕓 {place.timeRequired}</h2>
-            {/* <Button className='mt-2' Siz><MapPinned/></Button> */}
+        <div className="flex flex-col gap-1 flex-1 overflow-hidden">
+            <h2 className='font-bold text-lg break-words'>{place.placeName}</h2>
+            <p className='text-sm text-gray-500 mt-1 line-clamp-3'>{place.placeDetails}</p>
+            <div className='mt-1 text-sm flex flex-wrap items-center gap-1'>
+              <span className='text-gray-700'>Best Time to Visit:</span>
+              <span className='text-green-500 font-bold'>{place.bestTimeToVisit}</span>
+            </div>
+            <div className='mt-1 text-red-400 font-bold text-sm'>
+              🕓 {place.timeRequired}
+            </div>
+            {/* <Button className='mt-2'><MapPinned/></Button> */}
         </div>
     </div>
     </Link>
