@@ -1,5 +1,3 @@
-
-
 import { HotelCardItem } from './HotelCardItem';
 
 export const Hotels = ({ trip }) => {

@@ -7,6 +7,7 @@ import { InfoSection } from './components/InfoSection';
 import { Hotels } from './components/Hotels';
 import { PlaceToVisit } from './components/PlaceToVisit';
 import Footer from '@/components/custom/Footer';
+import Header from '@/components/custom/Header';
 
 export const ViewTrip = () => {
 
@@ -34,6 +35,7 @@ export const ViewTrip = () => {
 
     return (<>
         <div className='p-10 md:px-20 lg:px-44 xl:px-56 mt-10'>
+            <Header />
             {/* Information Section */}
             <InfoSection trip={tripData} />
 

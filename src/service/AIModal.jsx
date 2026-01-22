@@ -4,7 +4,9 @@ const API_KEY = (import.meta.env.VITE_GOOGLE_GEMINI_AI_API_KEY ?? "").trim();
 
 // ✅ Validate API key
 if (!API_KEY) {
-  throw new Error("Missing Gemini API key. Please set VITE_GOOGLE_GEMINI_AI_API_KEY in your .env file");
+  throw new Error(
+    "Missing Gemini API key. Please set VITE_GOOGLE_GEMINI_AI_API_KEY in your .env file"
+  );
 }
 
 // ✅ Initialize Gemini client
@@ -32,7 +34,25 @@ export const chatSession = {
       const prompt = {
         contents: [
           {
-            parts: [{ text: FINAL_PROMPT }],
+            parts: [
+              {
+                text: `
+You are a travel planning assistant.
+Return ONLY valid JSON (no explanation, no markdown, no extra text).
+Format example:
+{
+  "destination": "Paris",
+  "days": [
+    {"day": 1, "activities": ["Eiffel Tower", "Louvre Museum"]}
+  ],
+  "estimated_cost": 1200,
+  "best_time_to_visit": "April to June"
+}
+
+Now generate the itinerary for: ${FINAL_PROMPT}
+`,
+              },
+            ],
           },
         ],
       };

@@ -91,12 +91,20 @@ import { X, Sparkles, MapPin } from "lucide-react";
                   My Trips
                 </Button>
 
+
                 <Button
-                  className="bg-[#f56551] hover:bg-primary/90 text-primary-foreground shadow-glow"
+                  className="bg-[#ff7e5f] hover:bg-[#feb47b]/90 text-primary-foreground shadow-glow"
                   onClick={() => navigate("/create-trip")}
                 >
                   Add Trip
                 </Button>
+
+                {/* <Button
+                  className="bg-[#f56551] hover:bg-primary/90 text-primary-foreground shadow-glow"
+                  onClick={() => navigate("/create-trip")}
+                >
+                  Add Trip
+                </Button> */}
 
                 {/* User Avatar + Popover */}
                 <Popover>
