@@ -178,9 +178,9 @@ export const CreateTrip = () => {
   };
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Header />
-      <div className="sm:px-10 md:px-32 lg:px-56 xl:px-72 px-5 mt-20">
+      <div className="flex-1 sm:px-10 md:px-32 lg:px-56 xl:px-72 px-5 mt-20 pb-10">
         <h1 className="text-3xl font-bold">
           Tell us your travel preferences 🗺️✈️
         </h1>
@@ -310,7 +310,7 @@ export const CreateTrip = () => {
       </div>
 
       <Footer />
-    </>
+    </div>
   );
 };
 

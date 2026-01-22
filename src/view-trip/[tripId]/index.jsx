@@ -33,8 +33,9 @@ export const ViewTrip = () => {
 
 
 
-    return (<>
-        <div className='p-10 md:px-20 lg:px-44 xl:px-56 mt-10'>
+    return (
+        <div className="min-h-screen flex flex-col">
+            <div className='flex-1 p-10 md:px-20 lg:px-44 xl:px-56 mt-10 pb-10'>
             <Header />
             {/* Information Section */}
             <InfoSection trip={tripData} />
@@ -44,11 +45,10 @@ export const ViewTrip = () => {
 
             {/* Daily Plan */}
             <PlaceToVisit trip={tripData} />
-        </div>
+            </div>
 
-         {/* Footer Section */}
-        <Footer />
-        
-        </>
+            {/* Footer Section */}
+            <Footer />
+        </div>
     )
 }
