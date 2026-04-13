@@ -1,80 +1,129 @@
-# 🌐 Planora - Smart AI Trip Planner
+# 🌐 Smart AI Trip Planner
 
-**Smart AI Trip Planner** is an intelligent travel planning web application that leverages AI to generate personalized travel itineraries, budget suggestions, and destination highlights. It helps users discover new places, plan day-wise trips, and get travel tips — all in one place, just by chatting with the smart AI assistant.
-
----
-
-## 📌 Problem Statement
-
-Planning a trip manually can be time-consuming and overwhelming, especially when comparing multiple destinations, costs, and activities. Travelers often need to visit multiple websites to gather this information. The **Smart AI Trip Planner** solves this by offering an all-in-one platform where users can simply interact with a chatbot to receive a customized trip plan.
+**Smart AI Trip Planner** is a React-based travel planning web app that converts user travel preferences into structured itineraries using AI and Google Places data. It stores generated trips in Firebase Firestore and shows destination, hotel, and day-by-day recommendations in a clean single-page interface.
 
 ---
 
-## 🔍 Introduction
+## 🚀 What this project does
 
-This project combines the power of artificial intelligence, real-time APIs, and user-centric UI to make travel planning smarter, faster, and more interactive. The goal is to provide a seamless experience where users can plan trips with just a few inputs — saving time and avoiding confusion.
-
----
-
-## 📖 Background
-
-With the rise of AI and travel APIs, the potential to automate and personalize travel experiences has become more feasible. Integrating services like OpenAI for trip logic, Google Places for real-time data, and Unsplash for images, we aimed to create a smart assistant that not only generates itineraries but also visualizes them attractively.
-
----
-
-## 📚 Literature Review
-
-| Study / Tool                  | Summary                                                                 |
-|------------------------------|-------------------------------------------------------------------------|
-| Google Places API            | Used to fetch real-time details of places, hotels, and restaurants.     |
-| Unsplash API                 | Offers high-quality location-based images.                              |
-| OpenAI GPT                   | Generates contextual responses and customized travel itineraries.       |
-| Existing Travel Planners     | Most require manual input and lack dynamic, personalized conversation.  |
-| Smart Chatbot Models         | Assist in task automation and user engagement in tourism applications.  |
+- Lets users search destinations using Google Places autocomplete.
+- Collects travel preferences: days, budget tier, and traveler type.
+- Generates a structured travel itinerary through Google Gemini AI.
+- Enriches each itinerary place with real details and photos from Google Places.
+- Saves trips to Firebase Firestore for later viewing.
+- Displays saved trips and full trip details with hotel and activity cards.
 
 ---
 
-## 💡 Proposed Solution
+## 🧩 Core features
 
-Our system provides:
-- A chatbot interface to interact naturally with users
-- AI-generated custom itineraries
-- Budget estimation based on duration, preferences, and destination
-- Day-wise activities with images and travel tips
-- Real-time suggestions of places and stays using APIs
+- `Home` landing page with hero, destinations, features, FAQ, and footer.
+- `Create Trip` workflow that builds the AI prompt and generates trip plans.
+- `My Trips` page to list authenticated user trips.
+- `View Trip` page for full itinerary details, hotel recommendations, and place cards.
+- Google OAuth sign-in for saving trips under the user email.
+- AI prompt enforcement for strict JSON output.
+- Place enrichment layer to add images and coordinates.
 
 ---
 
-### 📊 Architecture Diagram
-```mermaid
-flowchart TD
-    A[Create Trip Info webpage] --> B[Click Generate Trip]
-    B --> C{Authentication}
-    C -->|Not Authenticated| D[Google Auth]
-    D --> E[Save to Local]
-    E --> F[Generate Prompt]
-    C -->|Authenticated| F[Generate Prompt]
-    F --> G[Google Gemini AI Model]
-    G --> H[Trip Generated]
+## 🏗️ Tech stack
+
+- React 18 + Vite
+- React Router DOM
+- Tailwind CSS
+- Firebase Firestore
+- Google OAuth via `@react-oauth/google`
+- Gemini AI via `@google/generative-ai`
+- Google Places API
+- Axios for HTTP requests
+- Sonner for toast notifications
+- Radix UI for dialog components
+
+---
+
+## 📁 Important files and folders
+
+- `src/main.jsx` - application entry point, router setup, OAuth provider.
+- `src/App.jsx` - landing page layout.
+- `src/create-trip/index.jsx` - main trip generation page.
+- `src/service/AIModal.jsx` - Gemini AI client + prompt builder.
+- `src/constants/options.jsx` - budget/traveler options and `AI_PROMPT` template.
+- `src/lib/enrichDataWithPlaces.js` - add place details and images to AI itinerary output.
+- `src/api/place-details.js` - Google Places wrapper endpoint.
+- `src/service/firebaseConfig.jsx` - Firebase Firestore setup.
+- `src/my-trips/index.jsx` - user trip list page.
+- `src/view-trip/[tripId]/index.jsx` - display full saved trip details.
+
+---
+
+## 🌐 Routing
+
+- `/` → landing page
+- `/create-trip` → create and generate a new trip
+- `/my-trips` → list saved trips for authenticated user
+- `/view-trip/:tripId` → view a saved trip detail page
+
+---
+
+## ⚙️ Environment variables
+
+Create a `.env` file at the project root with these variables:
+
+```env
+VITE_GOOGLE_PLACE_API_KEY=your_google_places_api_key
+VITE_GOOGLE_GEMINI_AI_API_KEY=your_google_gemini_api_key
+VITE_GOOGLE_AUTH_CLIENT_ID=your_google_oauth_client_id
+VITE_UNSPLASH_API_KEY=your_unsplash_api_key
+VITE_BACKEND_API=http://localhost:5000
 ```
 
+> Note: The app currently uses `VITE_GOOGLE_PLACE_API_KEY`, `VITE_GOOGLE_GEMINI_AI_API_KEY`, and `VITE_GOOGLE_AUTH_CLIENT_ID` in the core flow.
+
 ---
 
-## 📈 Future Scope
-- Booking Integration:-
-      Allow users to book hotels, flights, and transport directly from the itinerary.
-- Multi-user Planning:-
-      Enable group planning with shared itineraries and collaborative edits.
-- Offline Access:-
-      Let users download itineraries as PDFs or access them offline via mobile apps.
+## 🛠️ How to run locally
 
-  ---
-## 📚 Conclusion
-- Planora- A SmartAI Trip Planner redefines travel planning by leveraging artificial intelligence, real-time data, and intuitive design. It not only automates itinerary creation but also adapts to user preferences, making trips more personalized, efficient, and sustainable. 
-- With seamless integration of APIs, smart recommendations, and day-to-day planning features, it transforms the complex process of organizing travel into a simple, engaging, and intelligent experience.
-  
+```bash
+npm install
+npm run dev
+```
+
+Then open the Vite URL shown in the terminal.
+
 ---
 
-## 👤 Contributor
+## 💡 How trip generation works
+
+1. User fills destination, days, budget, and traveler type.
+2. `CreateTrip` builds `FINAL_PROMPT` using `AI_PROMPT`.
+3. `chatSession.sendMessage()` sends the prompt to Gemini AI.
+4. AI returns JSON with `destination`, `itinerary`, `hotels`, and `estimated_cost`.
+5. `enrichDataWithPlaces` calls `/api/place-details` to add metadata and images.
+6. Result is saved to Firestore and shown on `/view-trip/:tripId`.
+
+---
+
+## 📌 Notes and caveats
+
+- Firebase config is hard-coded in `src/service/firebaseConfig.jsx`.
+- The project expects `src/api/place-details.js` to be available as an API route.
+- `npm run dev:api` points to `src/api/server.js`, but that file is not present here.
+- The AI prompt expects strict JSON output, so invalid AI responses may fail parsing.
+
+---
+
+## ✅ Recommended improvements
+
+- Add better AI response validation and fallback handling.
+- Add a sign-out flow and safer auth state handling.
+- Expose trip generation errors more clearly to users.
+- Replace hard-coded Firebase config with secure environment-based config.
+- Add tests for API enrichment and prompt parsing.
+
+---
+
+## 👤 Author
+
 - Vivek Chandrika Yadav
-- vivekyadavatwork@gmail.com
+- Email: vivekyadavatwork@gmail.com
