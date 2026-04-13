@@ -70,91 +70,43 @@ export const CreateTrip = () => {
   };
 
   const OnGenerateTrip = async () => {
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      // Format the prompt with actual values
-      const FINAL_PROMPT = AI_PROMPT
-        .replace('{location}', formData.location.label)
-        .replace('{totalDays}', formData.noOfDays)
-        .replace('{traveller}', formData.traveller)
-        .replace('{budget}', formData.budget);
-
-      try {
-        const result = await chatSession.sendMessage(FINAL_PROMPT);
-
-        // Extract JSON block
-        const jsonMatch = result.match(/\{[\s\S]*\}/);
-        if (!jsonMatch) throw new Error("No valid JSON block found in AI response");
-
-        let jsonString = jsonMatch[0];
-
-        // ❌ Cleanup common JSON issues
-        jsonString = jsonString
-          .replace(/\n/g, ' ')                       // remove newlines
-          .replace(/,\s*}/g, '}')                   // remove trailing commas in objects
-          .replace(/,\s*]/g, ']')                   // remove trailing commas in arrays
-          .replace(/([{,])\s*([a-zA-Z0-9_]+)\s*:/g, '$1"$2":') // quote unquoted keys
-
-        let parsed;
-        try {
-          parsed = JSON.parse(jsonString);
-        } catch (parseError) {
-          console.error("❌ JSON Parse Error (first pass):", parseError);
-          console.error("❌ Attempted JSON:", jsonString);
-
-          // Try a best-effort fix for truncated JSON (e.g. missing closing ] or })
-          const openCurly = (jsonString.match(/{/g) || []).length;
-          const closeCurly = (jsonString.match(/}/g) || []).length;
-          const openSquare = (jsonString.match(/\[/g) || []).length;
-          const closeSquare = (jsonString.match(/]/g) || []).length;
-
-          let fixedJson = jsonString;
-
-          // Close arrays first, then objects – this matches our schema shape
-          if (openSquare > closeSquare) {
-            fixedJson += ']'.repeat(openSquare - closeSquare);
-          }
-          if (openCurly > closeCurly) {
-            fixedJson += '}'.repeat(openCurly - closeCurly);
-          }
-
-          try {
-            parsed = JSON.parse(fixedJson);
-            console.warn("✅ JSON parsed successfully after auto-fix.");
-          } catch (secondError) {
-            console.error("❌ JSON Parse Error (after auto-fix):", secondError);
-            throw new Error("Failed to parse AI response as JSON");
-          }
-        }
-
-        // Validate required fields (support older schema too)
-        if (!parsed.itinerary || !Array.isArray(parsed.itinerary)) {
-          if (parsed.days && Array.isArray(parsed.days)) {
-            parsed.itinerary = parsed.days;
-            delete parsed.days;
-          } else {
-            throw new Error("Invalid trip data format: 'itinerary' array missing");
-          }
-        }
-
-        // Enrich with additional data
-        const enriched = await enrichTravelData(parsed);
-        await SaveAiTrip(enriched);
-        
-        toast.success("🎉 Trip plan generated successfully!");
-        setLoading(false);
-      } catch (error) {
-        console.error("❌ Error details:", error);
-        setLoading(false);
-        toast.error(error.message || "Failed to generate trip plan");
-      }
-    } catch (error) {
-      console.error("❌ Error details:", error);
+    if (!formData.location || !formData.noOfDays || !formData.budget || !formData.traveller) {
+      toast.error("Please fill all details");
       setLoading(false);
-      toast.error(error.message || "Failed to generate trip plan");
+      return;
     }
-  };
+
+    const FINAL_PROMPT = AI_PROMPT
+      .replace('{location}', formData.location.label)
+      .replace('{totalDays}', formData.noOfDays)
+      .replace('{traveller}', formData.traveller)
+      .replace('{budget}', formData.budget);
+
+    // ✅ Get parsed JSON directly
+    const parsed = await chatSession.sendMessage(FINAL_PROMPT);
+
+    // ✅ Validate structure
+    if (!parsed.itinerary || !Array.isArray(parsed.itinerary)) {
+      throw new Error("Invalid trip data format");
+    }
+
+    // ✅ Enrich data
+    const enriched = await enrichTravelData(parsed);
+
+    await SaveAiTrip(enriched);
+
+    toast.success("🎉 Trip plan generated successfully!");
+    setLoading(false);
+
+  } catch (error) {
+    console.error("❌ Error:", error);
+    setLoading(false);
+    toast.error(error.message || "Failed to generate trip plan");
+  }
+};
 
   const GetUserProfile = async (tokenInfo) => {
     try {
@@ -178,9 +130,9 @@ export const CreateTrip = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <>
       <Header />
-      <div className="flex-1 sm:px-10 md:px-32 lg:px-56 xl:px-72 px-5 mt-20 pb-10">
+      <div className="sm:px-10 md:px-32 lg:px-56 xl:px-72 px-5 mt-20">
         <h1 className="text-3xl font-bold">
           Tell us your travel preferences 🗺️✈️
         </h1>
@@ -310,7 +262,7 @@ export const CreateTrip = () => {
       </div>
 
       <Footer />
-    </div>
+    </>
   );
 };
 

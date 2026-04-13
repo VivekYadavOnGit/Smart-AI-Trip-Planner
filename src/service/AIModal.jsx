@@ -2,66 +2,50 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const API_KEY = (import.meta.env.VITE_GOOGLE_GEMINI_AI_API_KEY ?? "").trim();
 
-// ✅ Validate API key
 if (!API_KEY) {
-  throw new Error(
-    "Missing Gemini API key. Please set VITE_GOOGLE_GEMINI_AI_API_KEY in your .env file"
-  );
+  throw new Error("Missing Gemini API key.");
 }
 
-// ✅ Initialize Gemini client
 const ai = new GoogleGenerativeAI(API_KEY);
+
 
 export const chatSession = {
   sendMessage: async (FINAL_PROMPT) => {
     try {
-      if (!FINAL_PROMPT) {
-        throw new Error("Prompt is required");
-      }
-
-      // ✅ Use Gemini 2.0 Flash (latest working model)
       const model = ai.getGenerativeModel({
-        model: "models/gemini-2.0-flash",
-        generationConfig: {
-          temperature: 0.9,
-          topK: 1,
-          topP: 1,
-          maxOutputTokens: 2048,
-        },
+        model: "gemini-3-flash-preview", // ✅ FINAL FIX
       });
 
-      // ✅ Proper content structure
-      const prompt = {
-        contents: [
-          {
-            parts: [
-              {
-                text: `
+      const prompt = `
 You are a travel planning assistant.
-Return ONLY valid JSON (no explanation, no markdown, no extra text).
-Format example:
+
+STRICT RULES:
+- Return ONLY valid JSON
+- No markdown
+- No explanation
+- No trailing commas
+- Use double quotes
+
+Format:
 {
-  "destination": "Paris",
-  "days": [
-    {"day": 1, "activities": ["Eiffel Tower", "Louvre Museum"]}
+  "destination": "City Name",
+  "itinerary": [
+    {"day": 1, "activities": ["Place 1", "Place 2"]}
   ],
-  "estimated_cost": 1200,
-  "best_time_to_visit": "April to June"
+  "estimated_cost": 1000,
+  "best_time_to_visit": "Month range"
 }
 
-Now generate the itinerary for: ${FINAL_PROMPT}
-`,
-              },
-            ],
-          },
-        ],
-      };
+User request: ${FINAL_PROMPT}
+`;
 
-      // Generate content
       const result = await model.generateContent(prompt);
-      const response = await result.response;
+      let text = result.response.text();
 
-      return response.text();
+      text = text.replace(/```json/g, "").replace(/```/g, "").trim();
+
+      return JSON.parse(text);
+
     } catch (error) {
       console.error("❌ Gemini Error:", error);
       throw new Error(`Failed to generate content: ${error.message}`);
