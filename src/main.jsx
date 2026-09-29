@@ -7,6 +7,7 @@ import { CreateTrip } from "./create-trip/index.jsx";
 import { ViewTrip } from "./view-trip/[tripId]/index.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/react";
 
 import MyTrips from "./my-trips/index.jsx";
 
@@ -34,6 +35,7 @@ createRoot(document.getElementById("root")).render(
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_AUTH_CLIENT_ID}>
       <RouterProvider router={router} />
       <Toaster />
+      <Analytics />
     </GoogleOAuthProvider>
   </StrictMode>
 );
